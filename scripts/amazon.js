@@ -1,31 +1,3 @@
-const products = [{
-  image : 'images/products/athletic-cotton-socks-6-pairs.jpg',
-  name : 'Black and Gray Athletic Cotton Socks - 6 Pairs',
-  rating : {
-    stars : 'images/ratings/rating-45.png',
-    count : 87
-  },
-  priceCents : 1090
-} ,
-{
-  image : 'images/products/intermediate-composite-basketball.jpg',
-  name : 'Intermediate Size Basketball',
-  rating : {
-    stars : 'images/ratings/rating-40.png',
-    count : 127
-  },
-  priceCents : 2095
-},
-{
-  image : 'images/products/adults-plain-cotton-tshirt-2-pack-teal.jpg',
-  name : 'Adults Plain Cotton T-Shirt - 2 Pack',
-  rating : {
-    stars : 'images/ratings/rating-45.png',
-    count : 56
-  },
-  priceCents : 799
-}];
-
 let productHTML = '';
 products.forEach((product) => {
   productHTML += 
@@ -41,7 +13,7 @@ products.forEach((product) => {
 
     <div class="product-rating-container">
       <img class="product-rating-stars"
-        src="${product.rating.stars}">
+        src="images/ratings/rating-${product.rating.stars * 10}.png">
       <div class="product-rating-count link-primary">
         ${product.rating.count}
       </div>
@@ -73,7 +45,9 @@ products.forEach((product) => {
       Added
     </div>
 
-    <button class="add-to-cart-button button-primary">
+    <button class="add-to-cart-button button-primary js-add-to-cart "
+    data-product-id= "${product.id}
+     ">
       Add to Cart
     </button>
   </div>`
@@ -81,5 +55,40 @@ products.forEach((product) => {
 );
 
 document.querySelector('.products-grid').innerHTML = productHTML ;
+
+
+let totalCartQuantity =0;
+document.querySelectorAll('.js-add-to-cart').forEach(
+  (button) => {
+  
+   let cartQuantity = 0;
+   
+
+   button.addEventListener('click' , () => {
+
+    let matchingItem;
+
+    cart.forEach((element) => {
+      if(button.dataset.productId === element.productId)
+        matchingItem = element;
+    });
+
+    if(matchingItem){
+      matchingItem.quantity++;
+      totalCartQuantity++;
+    }    
+      else{
+        cartQuantity++;
+        totalCartQuantity++;
+        cart.push({
+          productId : button.dataset.productId,
+          quantity : cartQuantity
+        });
+      }
+      document.querySelector('.cart-quantity').innerHTML = totalCartQuantity;
+      console.log(cart);
+    });   
+
+   });
 
 
