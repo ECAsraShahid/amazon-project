@@ -1,7 +1,7 @@
 import {products} from '../data/products.js';
 import {convertCurrency} from './utils/money.js';
 import {cart , removeProductFromCart} from '../data/cart.js';
-
+import { totalCartQuantity , updateCartQuantity} from './utils/update-cart-quantity.js';
 let orderSummaryHTML = '';
 
 cart.forEach((cartItem) => {
@@ -93,7 +93,6 @@ cart.forEach((cartItem) => {
     </div>
   </div>
   `;
-
   });
 
   document.querySelector('.js-order-summary').innerHTML = orderSummaryHTML;
@@ -106,9 +105,10 @@ cart.forEach((cartItem) => {
       removeProductFromCart(productId);
 
       document.querySelector(`.js-cart-item-container-${productId}`).remove();
-    
     })
     
   });
-
-
+      
+      updateCartQuantity();
+      
+      document.querySelector('.js-checkout-header-middle-section').innerHTML = `<a class="return-to-home-link" href="amazon.html"> ${totalCartQuantity} items</a>`;
