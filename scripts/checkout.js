@@ -1,10 +1,10 @@
 import {products} from '../data/products.js';
 import {convertCurrency} from './utils/money.js';
-import {cart , removeProductFromCart} from '../data/cart.js';
-import { totalCartQuantity , updateCartQuantity} from './utils/update-cart-quantity.js';
+import * as cartModule from '../data/cart.js';
+import { updateCartQuantity} from './utils/update-cart-quantity.js';
 let orderSummaryHTML = '';
 
-cart.forEach((cartItem) => {
+cartModule.cart.forEach((cartItem) => {
   const productId = cartItem.productId;
 
   let matchingItem;
@@ -34,10 +34,15 @@ cart.forEach((cartItem) => {
         </div>
         <div class="product-quantity">
           <span>
-            Quantity: <span class="quantity-label">${cartItem.quantity}</span>
+            Quantity: <span class="quantity-label quantity-label-${matchingItem.id}">${cartItem.quantity}</span>
           </span>
-          <span class="update-quantity-link link-primary">
+          <span class="update-quantity-link link-primary js-update-quantity-link" data-matching-item-id = "${matchingItem.id}">
             Update
+          </span>
+          <input class="quantity-input quantity-input-${matchingItem.id}" data-matching-item-id = "${matchingItem.id}">
+          <span class="save-quantity-link link-primary js-save-quantity-link" data-matching-item-id = "${matchingItem.id}" tabindex="0" 
+  role="button">
+          Save
           </span>
           <span class="delete-quantity-link link-primary js-delete-link"
           data-matching-item-id = "${matchingItem.id}">
@@ -93,22 +98,87 @@ cart.forEach((cartItem) => {
     </div>
   </div>
   `;
-  });
+});
 
-  document.querySelector('.js-order-summary').innerHTML = orderSummaryHTML;
+document.querySelector('.js-order-summary').innerHTML = orderSummaryHTML;
+
+document.querySelectorAll('.js-delete-link').forEach((link) => {
+
+  link.addEventListener('click' , () => {
+    const productId = link.dataset.matchingItemId;
+
+    cartModule.removeProductFromCart(productId);
+
+    const resultantQuantity = updateCartQuantity();  
+    document.querySelector('.js-checkout-header-middle-section').innerHTML = `<a class="return-to-home-link" href="amazon.html"> ${resultantQuantity} items</a>`;
+
+    document.querySelector(`.js-cart-item-container-${productId}`).remove();
+  })
   
-  document.querySelectorAll('.js-delete-link').forEach((link) => {
+});
+      
 
-    link.addEventListener('click' , () => {
-      const productId = link.dataset.matchingItemId;
+const resultantQuantity = updateCartQuantity();
+document.querySelector('.js-checkout-header-middle-section').innerHTML = `<a class="return-to-home-link" href="amazon.html"> ${resultantQuantity} items</a>`;
 
-      removeProductFromCart(productId);
-
-      document.querySelector(`.js-cart-item-container-${productId}`).remove();
-    })
     
+document.querySelectorAll('.js-update-quantity-link').forEach((updatelink) => {
+
+  updatelink.addEventListener('click' , () => {
+
+    const productId = updatelink.dataset.matchingItemId;
+    cartModule.updateLinkQuantity(productId);
+
   });
-      
-      updateCartQuantity();
-      
-      document.querySelector('.js-checkout-header-middle-section').innerHTML = `<a class="return-to-home-link" href="amazon.html"> ${totalCartQuantity} items</a>`;
+
+});
+
+
+document.querySelectorAll('.quantity-input').forEach((inputlink) => {
+
+  inputlink.addEventListener('keydown' , () => {
+
+    const productId = inputlink.dataset.matchingItemId;
+    cartModule.inputQuantity(productId);
+
+  });
+
+});
+
+
+document.querySelectorAll('.js-save-quantity-link').forEach((savelink) => {
+  
+  savelink.addEventListener('click' , () => {
+
+    const productId = savelink.dataset.matchingItemId;
+    cartModule.saveQuantity(productId);
+
+    const resultantQuantity = updateCartQuantity();
+
+    console.log(resultantQuantity);
+
+    document.querySelector('.js-checkout-header-middle-section').innerHTML = `<a class="return-to-home-link" href="amazon.html"> ${resultantQuantity} items</a>`;
+
+  });
+
+  //I will try Later 
+  
+  /*savelink.addEventListener('keydown' , (event) => {
+
+    if(event.key === 'Enter'){
+
+      const productId = savelink.dataset.matchingItemId;
+      cartModule.saveQuantity(productId);
+
+      const resultantQuantity = updateCartQuantity();
+
+      console.log(resultantQuantity);
+
+      document.querySelector('.js-checkout-header-middle-section').innerHTML = `<a class="return-to-home-link" href="amazon.html"> ${resultantQuantity} items</a>`;
+
+    }
+
+  });*/
+
+});
+

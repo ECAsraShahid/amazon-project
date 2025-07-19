@@ -1,7 +1,7 @@
 import {cart , addToCart} from '../data/cart.js';
 import {convertCurrency} from './utils/money.js';
 import {products} from '../data/products.js';
-import {  totalCartQuantity ,  updateCartQuantity} from './utils/update-cart-quantity.js';
+import { updateCartQuantity} from './utils/update-cart-quantity.js';
 
 let productHTML = '';
 products.forEach((product) => {
@@ -33,7 +33,7 @@ products.forEach((product) => {
         <option selected value="1">1</option>
         <option value="2">2</option>
         <option value="3">3</option>
-        <option value="4">4</option> f
+        <option value="4">4</option> 
         <option value="5">5</option>
         <option value="6">6</option>
         <option value="7">7</option>
@@ -73,7 +73,7 @@ document.querySelectorAll('.js-add-to-cart').forEach(
       updateCartQuantity();
       
       console.log(cart);
-      document.querySelector('.cart-quantity').innerHTML = totalCartQuantity;
+      document.querySelector('.cart-quantity').innerHTML = updateCartQuantity();
 
       document.querySelector(`.js-added-to-cart-${productId}`).classList.add('added-opacity');
 

@@ -20,6 +20,17 @@
   margin-bottom: 18px;
 }
 
+.quantity-input{
+  width:30px;
+}
+.quantity-input , .save-quantity-link , .is-editing .quantity-label , .is-editing .js-update-quantity-link{
+  display:none;
+}
+
+.is-editing-quantity .quantity-input, .is-editing-quantity .save-quantity-link{
+  display:initial;
+}
+
 .checkout-grid {
   display: grid;
   /* Here, 1fr means the first column will take
