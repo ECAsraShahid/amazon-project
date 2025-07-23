@@ -101,3 +101,18 @@ export function updateQuantity (productId , newQuantity){
   return newQuantity;
 
  }
+
+export function deliveryOption (productId , deliveryOptionId){
+
+  let matchingItem;
+
+  cart.forEach((element) => {
+    if( productId === element.productId)
+      matchingItem = element;   
+  });
+
+  matchingItem.deliveryOptionId = deliveryOptionId;
+
+  saveToStorage();
+  
+}
