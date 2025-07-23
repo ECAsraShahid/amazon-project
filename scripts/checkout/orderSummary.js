@@ -5,6 +5,7 @@ import { deliveryOptions , getDeliveryOptions } from '../../data/deliveryOptions
 import { updateCartQuantity} from '../utils/update-cart-quantity.js';
 import dayjs from 'https://unpkg.com/supersimpledev@8.5.0/dayjs/esm/index.js';
 import { renderPaymentSummary } from './paymentSummary.js';
+import { renderCheckoutHeader } from './checkoutHeader.js';
 
 export function renderOrderSummary(){
 
@@ -114,23 +115,15 @@ export function renderOrderSummary(){
       link.addEventListener('click' , () => {
         const productId = link.dataset.matchingItemId;
 
-        cartModule.removeProductFromCart(productId);
-
-        const resultantQuantity = updateCartQuantity();  
-        document.querySelector('.js-checkout-header-middle-section').innerHTML = `<a class="return-to-home-link" href="amazon.html"> ${resultantQuantity} items</a>`;
-
-        document.querySelector(`.js-cart-item-container-${productId}`).remove();
-
+        cartModule.removeProductFromCart(productId);  
+        
+        renderCheckoutHeader();
+        renderOrderSummary();
         renderPaymentSummary();
       })
       
     });
-          
-
-    const resultantQuantity = updateCartQuantity();
-    document.querySelector('.js-checkout-header-middle-section').innerHTML = `<a class="return-to-home-link" href="amazon.html"> ${resultantQuantity} items</a>`;
-
-        
+     
     document.querySelectorAll('.js-update-quantity-link').forEach((updatelink) => {
 
       updatelink.addEventListener('click' , () => {
@@ -162,13 +155,8 @@ export function renderOrderSummary(){
         const productId = savelink.dataset.matchingItemId;
         cartModule.saveQuantity(productId);
 
-        const resultantQuantity = updateCartQuantity();
-
-        console.log(resultantQuantity);
-
-        document.querySelector('.js-checkout-header-middle-section').innerHTML = `<a class="return-to-home-link" href="amazon.html"> ${resultantQuantity} items</a>`;
-
-         renderPaymentSummary();
+        renderCheckoutHeader();
+        renderPaymentSummary();
 
       });
 

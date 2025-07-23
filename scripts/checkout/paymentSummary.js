@@ -11,9 +11,11 @@ export function renderPaymentSummary(){
     let totalTaxCents = 0;
     let totalOrder = 0; 
     let paymentSummaryHTML = '';
+    let totalQuantity = 0;
 
     cartModule.cart.forEach((item) => {
 
+      totalQuantity += item.quantity;
       const productId = item.productId;
       const matchingItem = getProducts(productId);
 
@@ -36,7 +38,7 @@ export function renderPaymentSummary(){
                             </div>
 
                             <div class="payment-summary-row">
-                              <div>Items (3):</div>
+                              <div>Items (${totalQuantity}):</div>
                               <div class="payment-summary-money">$${convertCurrency(productsPriceCents)}</div>
                             </div>
 
