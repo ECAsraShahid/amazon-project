@@ -1,9 +1,10 @@
-import {products} from '../../data/products.js';
+import {getProducts, products} from '../../data/products.js';
 import {convertCurrency} from '../utils/money.js';
 import * as cartModule from '../../data/cart.js';
-import { deliveryOptions } from '../../data/deliveryOptions.js';
+import { deliveryOptions , getDeliveryOptions } from '../../data/deliveryOptions.js';
 import { updateCartQuantity} from '../utils/update-cart-quantity.js';
 import dayjs from 'https://unpkg.com/supersimpledev@8.5.0/dayjs/esm/index.js';
+import { renderPaymentSummary } from './paymentSummary.js';
 
 export function renderOrderSummary(){
 
@@ -12,23 +13,11 @@ export function renderOrderSummary(){
     cartModule.cart.forEach((cartItem) => {
       const productId = cartItem.productId;
 
-      let matchingItem;
-
-      products.forEach((product) => {
-        if(product.id === productId){
-          matchingItem = product;
-        }
-      });
+      const matchingItem = getProducts(productId);
 
       const deliveryOptionId = cartItem.deliveryOptionId;
 
-      let deliveryOption;
-
-      deliveryOptions.forEach((option) => {
-        if(deliveryOptionId === option.id){
-          deliveryOption = option;
-        }
-      });
+      const deliveryOption = getDeliveryOptions(deliveryOptionId);
 
       const todayDate = dayjs();
       const deliveryDate = todayDate.add(deliveryOption.deliveryDays , 'days');
@@ -60,8 +49,7 @@ export function renderOrderSummary(){
                 Update
               </span>
               <input class="quantity-input quantity-input-${matchingItem.id}" data-matching-item-id = "${matchingItem.id}">
-              <span class="save-quantity-link link-primary js-save-quantity-link" data-matching-item-id = "${matchingItem.id}" tabindex="0" 
-      role="button">
+              <span class="save-quantity-link link-primary js-save-quantity-link" data-matching-item-id = "${matchingItem.id}">
               Save
               </span>
               <span class="delete-quantity-link link-primary js-delete-link"
@@ -132,6 +120,8 @@ export function renderOrderSummary(){
         document.querySelector('.js-checkout-header-middle-section').innerHTML = `<a class="return-to-home-link" href="amazon.html"> ${resultantQuantity} items</a>`;
 
         document.querySelector(`.js-cart-item-container-${productId}`).remove();
+
+        renderPaymentSummary();
       })
       
     });
@@ -178,6 +168,8 @@ export function renderOrderSummary(){
 
         document.querySelector('.js-checkout-header-middle-section').innerHTML = `<a class="return-to-home-link" href="amazon.html"> ${resultantQuantity} items</a>`;
 
+         renderPaymentSummary();
+
       });
 
       //I will try Later 
@@ -212,6 +204,7 @@ export function renderOrderSummary(){
         const {productId,deliveryOptionId} = element.dataset;
         cartModule.deliveryOption(productId , deliveryOptionId);
         renderOrderSummary();
+        renderPaymentSummary();
 
       });
 
