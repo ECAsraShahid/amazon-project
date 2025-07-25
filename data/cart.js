@@ -1,3 +1,4 @@
+import { renderOrderSummary } from '../scripts/checkout/orderSummary.js';
 import  { updateCartQuantity} from '../scripts/utils/update-cart-quantity.js';
 import { deliveryOptions } from './deliveryOptions.js';
 
@@ -68,8 +69,8 @@ export function saveQuantity(productId){
     const newQuantity = Number(document.querySelector(`.quantity-input-${productId}`).value);
 
     if(newQuantity >=0 && newQuantity <1000){
-      const quantityLabel = updateQuantity(productId , newQuantity);
-      document.querySelector(`.quantity-label-${productId}`).innerHTML = quantityLabel;
+      updateQuantity(productId , newQuantity);
+      renderOrderSummary();
     }
 
 }

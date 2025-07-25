@@ -22,7 +22,7 @@ export function renderOrderSummary(){
 
       const dateString = calculateDeliveryDate(deliveryOption);
 
-      calculateDeliveryDate(deliveryOption);
+      //why u call this??? calculateDeliveryDate(deliveryOption);
 
 
       orderSummaryHTML += `
@@ -179,9 +179,6 @@ export function renderOrderSummary(){
 
     });
 
-    /*const todayDate = dayjs();
-    const deliveryDate = todayDate.format('dddd, MMMM DD');
-    console.log(deliveryDate);*/
 
     document.querySelectorAll('.js-delivery-option').forEach((element) => {
 
